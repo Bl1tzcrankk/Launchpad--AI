@@ -14,10 +14,10 @@ class Scratch3YourExtension {
     getInfo () {
         return {
             // unique ID for your extension
-            id: 'yourScratchExtension',
+            id: 'launchpadAi',
 
             // name that will be displayed in the Scratch UI
-            name: 'Demo',
+            name: 'Launchpad AI',
 
             // colours to use for your extension blocks
             color1: '#000099',
@@ -31,7 +31,7 @@ class Scratch3YourExtension {
             blocks: [
                 {
                     // name of the function where your block code lives
-                    opcode: 'myFirstBlock',
+                    opcode: 'AskAI',
 
                     // type of block - choose from:
                     //   BlockType.REPORTER - returns a value, like "direction"
@@ -41,7 +41,7 @@ class Scratch3YourExtension {
                     blockType: BlockType.REPORTER,
 
                     // label to display on the block
-                    text: 'My first block [MY_NUMBER] and [MY_STRING]',
+                    text: 'Ask AI [PROMPT] on model [MODEL]',
 
                     // true if this block should end a stack
                     terminal: false,
@@ -54,9 +54,9 @@ class Scratch3YourExtension {
 
                     // arguments used in the block
                     arguments: {
-                        MY_NUMBER: {
+                        PROMPT: {
                             // default value before the user sets something
-                            defaultValue: 123,
+                            defaultValue: "Hi!",
 
                             // type/shape of the parameter - choose from:
                             //     ArgumentType.ANGLE - numeric value with an angle picker
@@ -65,11 +65,11 @@ class Scratch3YourExtension {
                             //     ArgumentType.NUMBER - numeric value
                             //     ArgumentType.STRING - text value
                             //     ArgumentType.NOTE - midi music value with a piano picker
-                            type: ArgumentType.NUMBER
+                            type: ArgumentType.STRING
                         },
-                        MY_STRING: {
+                        MODEL: {
                             // default value before the user sets something
-                            defaultValue: 'hello',
+                            defaultValue: 'llama3.1',
 
                             // type/shape of the parameter - choose from:
                             //     ArgumentType.ANGLE - numeric value with an angle picker
@@ -91,9 +91,13 @@ class Scratch3YourExtension {
      * implementation of the block with the opcode that matches this name
      *  this will be called when the block is used
      */
-    myFirstBlock ({ MY_NUMBER, MY_STRING }) {
-        // example implementation to return a string
-        return MY_STRING + ' : doubled would be ' + (MY_NUMBER * 2);
+    AskAI ({ PROMPT, MODEL }) {
+        fetch(`127.0.0.1:5000?prompt=${PROMPT}&model=${MODEL}`).then((response) => {
+            return response.json()
+        }).then((resJson)=>{
+            console.log(resJson)
+            return resJson.data
+        })
     }
 }
 
