@@ -1,7 +1,8 @@
 const BlockType = require('../../extension-support/block-type');
 const ArgumentType = require('../../extension-support/argument-type');
 const TargetType = require('../../extension-support/target-type');
-
+const corsProxy = 'cors-anywhere.herokuapp.com/';
+const requestURL = 'animated-enigma-rjgwr4qw5xj3gxr-6000.app.github.dev/?prompt=${"hello"}';
 class Scratch3YourExtension {
 
     constructor (runtime) {
@@ -92,12 +93,22 @@ class Scratch3YourExtension {
      *  this will be called when the block is used
      */
     AskAI ({ PROMPT, MODEL }) {
-        fetch(`127.0.0.1:5000?prompt=${PROMPT}&model=${MODEL}`).then((response) => {
-            return response.json()
-        }).then((resJson)=>{
-            console.log(resJson)
-            return resJson.data
+        fetch(`animated-enigma-rjgwr4qw5xj3gxr-6000.app.github.dev/?prompt=${PROMPT}`, {
+
         })
+        .then((response) => {
+            // In no-cors mode, response properties like response.json() might not work
+            // You may not be able to access response content directly
+            console.log(response);
+            return response.json(); // No further processing is possible in no-cors mode
+        })
+        .then((resJson) => {
+            console.log(resJson);
+            return resJson.data;
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
     }
 }
 
