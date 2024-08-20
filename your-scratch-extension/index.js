@@ -92,23 +92,17 @@ class Scratch3YourExtension {
      * implementation of the block with the opcode that matches this name
      *  this will be called when the block is used
      */
-    AskAI ({ PROMPT, MODEL }) {
-        fetch(`animated-enigma-rjgwr4qw5xj3gxr-6000.app.github.dev/?prompt=${PROMPT}`, {
-
+    AskAI = async ({ PROMPT, MODEL }) => {
+        await fetch(`https://animated-enigma-rjgwr4qw5xj3gxr-7000.app.github.dev/?prompt=${PROMPT}`).then(function (response) {
+            return response.json();
+        }).then(function (obj) {
+            console.log("RECIEVED FROM SERVER")
+            console.log(obj);
+            return obj.data;
+        }).catch(function (error) {
+            console.error("Something went wrong.");
+            console.error(error);
         })
-        .then((response) => {
-            // In no-cors mode, response properties like response.json() might not work
-            // You may not be able to access response content directly
-            console.log(response);
-            return response.json(); // No further processing is possible in no-cors mode
-        })
-        .then((resJson) => {
-            console.log(resJson);
-            return resJson.data;
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
     }
 }
 
